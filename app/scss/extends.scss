@@ -1,0 +1,42 @@
+%list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+%clearfix {
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+%pseudo {
+  content: "";
+  position: absolute;
+  display: block;
+}
+
+%before-vam {
+  &::before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    width: 0;
+  }
+}
+
+%flex-v {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+%flex-c {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

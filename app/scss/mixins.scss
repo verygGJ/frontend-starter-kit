@@ -1,0 +1,126 @@
+@mixin response($size) {
+  @media only screen and (max-width: $size) {
+    @content;
+  }
+}
+
+@mixin response-min($size) {
+  @media only screen and (min-width: $size) {
+    @content;
+  }
+}
+
+@mixin response-range($min, $max) {
+  @media only screen and (min-width: $min) and (max-width: $max) {
+    @content;
+  }
+}
+
+@mixin retina {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    @content;
+  }
+}
+
+@mixin hover() {
+  @media only screen and (min-width: 1025px) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin desktop-properties() {
+  @media only screen and (min-width: 1025px) {
+    @content;
+  }
+}
+
+@mixin bordered($size: 1px, $bgc: #000) {
+  > .border-3,
+  > .border-1 {
+    height: $size;
+    background-color: $bgc;
+  }
+  > .border-4,
+  > .border-2 {
+    width: $size;
+    background-color: $bgc;
+  }
+}
+
+@mixin triangle($direction : down, $size: 10px, $color: $black) {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 0;
+  width: 0;
+  @if ($direction == "up") {
+    border-bottom: $size solid $color;
+    border-left: 1/1.2 * $size solid transparent;
+    border-right: 1/1.2 * $size solid transparent;
+  } @else if ($direction == "down") {
+    border-top: $size solid $color;
+    border-left: 1/1.2 * $size solid transparent;
+    border-right: 1/1.2 * $size solid transparent;
+  } @else if ($direction == "left") {
+    border-top: 1/1.2 * $size solid transparent;
+    border-bottom: 1/1.2 * $size solid transparent;
+    border-right: $size solid $color;
+  } @else if ($direction == "right") {
+    border-top: 1/1.2 * $size solid transparent;
+    border-bottom: 1/1.2 * $size solid transparent;
+    border-left: $size solid $color;
+  }
+}
+
+@mixin verticalAlign() {
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+    width: 0.1px;
+  }
+}
+
+
+@mixin textOverflow($overflow: ellipsis) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: $overflow;
+}
+
+@mixin flexC() {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center
+}
+
+@mixin overlay($overlay-color) {
+  background: $overlay-color;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+@mixin marginX() {
+  &:first-of-type {
+    margin-left: 0;
+  }
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+@mixin marginY() {
+  &:first-of-type {
+    margin-top: 0;
+  }
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}

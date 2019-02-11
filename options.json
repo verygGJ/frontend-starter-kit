@@ -1,0 +1,5 @@
+{
+    "templateEngine": "html",
+    "env": "dev",
+    "uncss": false
+}

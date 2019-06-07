@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import paths from './gulp/paths';
-import { env } from './options';
+import { env } from './options.json';
 
 const uglifyJS = new webpack.optimize.UglifyJsPlugin({
   compress: {
@@ -14,7 +14,7 @@ const uglifyJS = new webpack.optimize.UglifyJsPlugin({
     comments: false,
     ascii_only: true
   },
-  sourceMap: env == 'dev'
+  sourceMap: env === 'dev'
 });
 
 export default {
@@ -34,14 +34,36 @@ export default {
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx']
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: require.resolve('babel-loader'),
-      query: {
-        presets: ['es2015', 'react']
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: require.resolve('babel-loader'),
+        query: {
+          presets: ['es2015', 'react', 'stage-0'],
+          plugins: ["babel-plugin-transform-class-properties"]
+        }
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: require.resolve('babel-loader'),
+        query: {
+          presets: ['es2015', 'react', 'stage-0'],
+          plugins: ["babel-plugin-transform-class-properties"]
+        }
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'images/'
+          }
+        }]
       }
-    }]
+    ]
   },
   plugins: env !== 'dev' ? [uglifyJS] : [
     new webpack.ProvidePlugin({

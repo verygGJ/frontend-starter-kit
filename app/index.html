@@ -5,6 +5,19 @@
 
     <h1 style="text-align: center">Hello World</h1>
 
+    <div style="text-align: center; cursor: pointer; margin-bottom: 20px;" class="popup-open" data-for="popup-test">Open popup</div>
+
+    <div style="max-width: 300px; margin: 50px auto;">
+      <select class="search-select" data-search="Поиск" data-error="Ничего не найдено">
+        <option disabled selected value="">-- Страна --</option>
+        <option value="">Украина</option>
+        <option value="">Росссия</option>
+        <option value="">США</option>
+      </select>
+    </div>
+
+    {% include 'popups.html' %}
+
     {% include 'js.html' %}
   </body>
 </html>

@@ -91,6 +91,8 @@ function initMarkapMenu() {
   button.addEventListener("click", toggleNav);
 };
 
-if (window.location.hostname === "localhost") {
-  initMarkapMenu()
-}
+initMarkapMenu();
+
+// if (window.location.hostname === "localhost") {
+//   initMarkapMenu()
+// }

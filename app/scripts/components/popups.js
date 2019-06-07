@@ -52,71 +52,104 @@ if (!Array.from) {
   }());
 }
 
-export default () => {
-  const htmlBlockHollder =  document.querySelector('html');
-  const bodyBlock =  document.querySelector('body');
-  const popupLink = document.querySelectorAll('.popup-open[data-for]');
-  
-  const popupOverlayActive = () => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    htmlBlockHollder.style.marginRight = scrollbarWidth;
-    htmlBlockHollder.style.overflow = 'hidden';
+class Popups {
+  constructor(options) {
+    const defaultOption = {
+      htmlBlock: 'html',
+      bodyBlock: 'body',
+      popupActiveClassName: 'active',
+      popupLinkDataAttr: 'data-for',
+      popupLinkSelector: '.popup-open',
+      popupSelector: '.popup',
+      closeButtonSelector: '.popup__close',
+      popupOverlaySelector: '.popup__overlay',
+      bugIOSClassName: 'iosBugFixCaret',
+    };
+    this.options = {
+      ...defaultOption,
+      ...options
+    };
+    return this.init(this.options);
   }
-  const popupOverlayDestroy = () => {
-    htmlBlockHollder.removeAttribute('style');
-  }
-  const iosRemoveClass = () => {
-    bodyBlock.classList.remove('iosBugFixCaret')
-  }
-  
-  const popupOpen = (link) => {
-    const popupElement = document.querySelector(`.${link.dataset.for}`);
-    if (popupElement) {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        popupElement.classList.toggle('active');
-        popupOverlayActive();
+
+  init(options) {
+    const popupOpen = () => {
+      const popupInner = document.querySelectorAll(options.popupSelector);
+      const link = document.querySelectorAll(options.popupLinkSelector);
+      link.forEach((option) => {
+        const data = option.getAttribute(options.popupLinkDataAttr);
+        const popupElement = document.querySelector(`.${data}`);
+        if (popupElement) {
+          option.addEventListener('click', (event) => {
+            event.preventDefault();
+            popupInner.forEach(popupInnerElement => {
+              popupInnerElement.classList.remove(options.popupActiveClassName);
+              this.popupOverlaySelectorDestroy();
+              this.iosRemoveClass();
+            });
+            popupElement.classList.toggle(options.popupActiveClassName);
+            this.popupOverlaySelectorActive();
+          });
+        }
       });
     }
-  };
-  Array.from(popupLink).forEach(popupOpen); 
+    Array.from(`[${options.popupLinkSelector[options.popupLinkDataAttr]}]`).forEach(popupOpen); 
+    this.popupClose();
+  }
 
-  const popupClose = () => {
-    const close = document.querySelectorAll('.popup__close');
-    const popupInner = document.querySelectorAll('.popup');
-    const popupOverlays = document.querySelectorAll('.popup__overlay');
+  popupOverlaySelectorActive() {
+    const htmlBlock = document.querySelector(this.options.htmlBlock);
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    htmlBlock.style.marginRight = `${scrollbarWidth}px`;
+    htmlBlock.style.overflow = 'hidden';
+  }
+
+  popupOverlaySelectorDestroy() {
+    const htmlBlock = document.querySelector(this.options.htmlBlock);
+    htmlBlock.removeAttribute('style');
+  }
+
+  iosRemoveClass() {
+    const bodyBlock =  document.querySelector(this.options.bodyBlock);
+    bodyBlock.classList.remove(this.options.bugIOSClassName);
+  }
+
+  popupCloseButton() {
+    const popupSelector = document.querySelectorAll(this.options.popupSelector);
+    const close = document.querySelectorAll(this.options.closeButtonSelector);
     close.forEach(closeElement => {
       closeElement.addEventListener('click', () => {
-        popupInner.forEach(popupInnerElement => {
-          popupInnerElement.classList.remove('active');
-          popupOverlayDestroy();
-          iosRemoveClass();
+        popupSelector.forEach(popupSelectorElement => {
+          popupSelectorElement.classList.remove(this.options.popupActiveClassName);
+          this.popupOverlaySelectorDestroy();
+          this.iosRemoveClass();
         });
       });
     });
-    popupOverlays.forEach(popupOverlaysElement => {
-      popupOverlaysElement.addEventListener('click', () => {
-        popupInner.forEach(popupInnerElement => {
-          popupInnerElement.classList.remove('active');
-          popupOverlayDestroy();
-          iosRemoveClass();
+  }
+
+  popupCloseOverlay() {
+    const popupSelector = document.querySelectorAll(this.options.popupSelector);
+    const popupOverlaySelectors = document.querySelectorAll(this.options.popupOverlaySelector);
+    popupOverlaySelectors.forEach(popupOverlaySelectorsElement => {
+      popupOverlaySelectorsElement.addEventListener('click', () => {
+        popupSelector.forEach(popupSelectorElement => {
+          popupSelectorElement.classList.remove(this.options.popupActiveClassName);
+          this.popupOverlaySelectorDestroy();
+          this.iosRemoveClass();
         });
       }); 
     });
   }
-
-  popupClose();
-
-  const ua = navigator.userAgent;
-  const iOS = /iPad|iPhone|iPod/.test(ua);
-  const iOS11 = /OS 11/.test(ua);
-  const popupBtn = document.querySelectorAll('.popup-open');
-  if (iOS && iOS11) {
-    popupBtn.forEach(popupBtnSingle => {
-      popupBtnSingle.addEventListener('click', () => {
-        bodyBlock.classList.add('iosBugFixCaret');
-      });
-    });  
+  
+  popupClose() {
+    this.popupCloseButton();
+    this.popupCloseOverlay();
   }
 
+  update() {
+    this.init(this.options);
+  }
 }
+
+export default Popups;

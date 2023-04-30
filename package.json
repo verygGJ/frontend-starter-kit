@@ -62,7 +62,7 @@
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
     "gulp-zip": "^4.1.0",
-    "gulp.spritesmith": "^6.10.1",
+    "gulp.spritesmith": "^6.13.0",
     "image-size": "^0.6.2",
     "imagemin-pngquant": "^5.0.1",
     "node-sass": "^4.12.0",
